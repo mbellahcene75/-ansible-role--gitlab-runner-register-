@@ -1,0 +1,11 @@
+---
+- name: restart runner
+  service:
+    name: gitlab-runner
+    state:
+
+- name: restart docker
+  become: true
+  service:
+    name: docker
+    state: restarted

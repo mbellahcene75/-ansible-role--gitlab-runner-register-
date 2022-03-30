@@ -1,0 +1,44 @@
+---
+- name: Reload config.toml
+  command: gitlab-runner verify --delete
+  changed_when: false
+
+- name: Check if executor is already present
+  command: gitlab-runner list
+  register: existing_executors
+  check_mode: no
+  changed_when: false
+
+- name: Register the docker runners on
+  environment:
+    REGISTER_LOCKED: false
+  command: >
+    gitlab-runner register
+      --executor docker
+      --run-untagged
+      --non-interactive
+      --name {{ ansible_hostname }}
+      --url {{ gitlab_runner_gitlab_url }}
+      --registration-token {{ gitlab_runner_resgistration_token }}
+      --docker-image {{ gitlab_runner_docker_image }}
+      --tag-list '{{ runner_tags }}'
+  when: ansible_hostname not in existing_executors.stderr
+
+- name: Set concurrent limit option
+  lineinfile:
+    dest: "/etc/gitlab-runner/config.toml"
+    regexp: '^(\s*)concurrent ='
+    line: '\1concurrent = {{ gitlab_runner_concurrent_limit }}'
+    state: present
+    backrefs: yes
+
+- name: restart runner
+  service:
+    name: gitlab-runner
+    state: restarted
+
+- name: restart docker
+  become: true
+  service:
+    name: docker
+    state: restarted

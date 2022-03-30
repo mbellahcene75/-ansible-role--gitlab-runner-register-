@@ -1,0 +1,10 @@
+- name: Register gitlabrunner
+  include_tasks: register.yml
+  when: 
+    - unregister is not defined
+
+- name:  Unregister gitlabrunner
+  include_tasks: unregister.yml
+  when: 
+    - unregister is defined
+    - unregister

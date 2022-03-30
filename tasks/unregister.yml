@@ -1,0 +1,2 @@
+- name: "Unregister runner"
+  command: gitlab-runner unregister --all-runners

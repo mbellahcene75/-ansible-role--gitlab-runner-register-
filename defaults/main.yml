@@ -1,0 +1,4 @@
+gitlab_runner_gitlab_url: "https://mygitlab.com"
+gitlab_runner_docker_image: "alpine:3.9.3"
+gitlab_runner_concurrent_limit: 1
+gitlab_runner_resgistration_token: ""
