@@ -1,1 +1,1 @@
-# -ansible-role--gitlab-runner-register-
+# ansible-role--gitlab-runner-register
